@@ -10,6 +10,7 @@ import json
 class SerialClass:
     """A base class that enables serialized representation of Python classes"""
 
+
     def class_attr(self, attr):
         """Make sure it is just an attribute and not a method, magic or otherwise"""
         return re.match('^(?!__).*', attr) and not callable(getattr(self, attr))
@@ -26,11 +27,11 @@ class SerialClass:
 
     def stringify(self, *args, **kwargs):
         """Get a jsonstring from the dict representation of the class"""
-        return json.dumps(self.serialize(*args, **kwargs), default=lambda o: str(o))
+        return json.dumps(self.serialize(*args, **kwargs), default=SerialClass.string_repr)
 
     def pstringify(self, *args, **kwargs):
         """Get a pretty jsonstring from the dict representation of the class"""
-        return json.dumps(self.serialize(*args, **kwargs), indent=4, sort_keys=True, default=lambda o: str(o))
+        return json.dumps(self.serialize(*args, **kwargs), indent=4, sort_keys=True, default=SerialClass.string_repr)
 
     def __iter__(self):
         """All the magic happens here"""
@@ -51,3 +52,8 @@ class SerialClass:
                 elif isinstance(el, dict):
                     return {SerialClass.unpack(k, depth=depth, calls=calls + 1): el[k] for k in el}
         return el
+
+    @staticmethod
+    def string_repr(o):
+        """Just get the class name + object"""
+        return str(o).split(' at ')[0] + '>'

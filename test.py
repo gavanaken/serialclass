@@ -19,16 +19,14 @@ class TestArbitraryClasses(unittest.TestCase):
     def test_hp(self):
         """Serailize Harry Potter"""
         hp = Library.HarryPotter()
-        expected = Expected.test_hp
-        self.assertEqual(expected, hp.serialize())
-        self.assertEqual(json.dumps(expected), hp.stringify())
+        self.assertEqual(Expected.test_hp, hp.serialize())
+        self.assertEqual(json.dumps(Expected.test_hp), hp.stringify())
 
     def test_vhc(self):
         """Serialize Hungry Caterpillar"""
         hc = Library.HungryCaterpillar()
-        expected = Expected.test_vhc
-        self.assertEqual(expected, hc.serialize())
-        self.assertEqual(json.dumps(expected), hc.stringify())
+        self.assertEqual(Expected.test_vhc, hc.serialize())
+        self.assertEqual(json.dumps(Expected.test_vhc), hc.stringify())
 
     def test_bookshelf(self):
         """Testing a bookshelf of shelves of books"""
@@ -36,5 +34,12 @@ class TestArbitraryClasses(unittest.TestCase):
         hp = Library.HarryPotter()
         bookshelf = Library.Bookshelf(4)
         bookshelf.stock_shelf(2, [hc, hp])
-        expected = Expected.test_bookshelf
-        self.assertEqual(expected, bookshelf.serialize())
+        self.assertEqual(Expected.test_bookshelf, bookshelf.serialize())
+
+    def test_bookshelf_depth_1(self):
+        """Testing that we can decrease our depth"""
+        hc = Library.HungryCaterpillar()
+        hp = Library.HarryPotter()
+        bookshelf = Library.Bookshelf(4)
+        bookshelf.stock_shelf(2, [hc, hp])
+        self.assertEqual(json.dumps(Expected.test_bookshelf_depth_1), bookshelf.stringify(depth=1))

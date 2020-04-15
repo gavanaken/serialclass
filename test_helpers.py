@@ -5,6 +5,7 @@ Copyright (c) 2020 Greg Van Aken
 
 from serialclass import SerialClass
 
+
 class Expected:
     """Some expected responses from our tests"""
     test_bookshelf = {
@@ -89,6 +90,19 @@ class Expected:
                 'useful': True,
                 'words': 224
             }
+    }
+
+    test_bookshelf_depth_1 = {
+        "Bookshelf": {
+            "color": "dark brown",
+            "material": "wood",
+            "shelves": [
+                "<test_helpers.Library.Shelf object>",
+                "<test_helpers.Library.Shelf object>",
+                "<test_helpers.Library.Shelf object>",
+                "<test_helpers.Library.Shelf object>"
+            ]
+        }
     }
 
 
