@@ -1,5 +1,5 @@
 version: 2.1
-# trigger
+
 orbs:
   python: circleci/python@0.2.1
 
@@ -16,6 +16,8 @@ jobs:
           name: Test
 
 workflows:
+  version: 2
   main:
     jobs:
-      - build-and-test
+      - build-and-test:
+          filters:
