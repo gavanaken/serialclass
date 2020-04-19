@@ -43,3 +43,7 @@ class TestArbitraryClasses(unittest.TestCase):
         bookshelf = Library.Bookshelf(4)
         bookshelf.stock_shelf(2, [hc, hp])
         self.assertEqual(json.dumps(Expected.test_bookshelf_depth_1), bookshelf.stringify(depth=1))
+
+
+if __name__ == '__main__':
+    unittest.main()
