@@ -10,7 +10,6 @@ import json
 class SerialClass:
     """A base class that enables serialized representation of Python classes"""
 
-
     def class_attr(self, attr):
         """Make sure it is just an attribute and not a method, magic or otherwise"""
         return re.match('^(?!__).*', attr) and not callable(getattr(self, attr))

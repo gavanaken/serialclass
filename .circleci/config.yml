@@ -4,16 +4,27 @@ orbs:
   python: circleci/python@0.2.1
 
 jobs:
-  build-and-test:
+  test:
     executor: python/default
     steps:
       - checkout
       - run:
           command: python test.py
           name: Test
+  lint:
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          command: pip install --yes pylint
+          name: Install pylint
+      - run:
+          command: pylint serialclass
+          name: Run pylint
 
 workflows:
   version: 2
   main:
     jobs:
-      - build-and-test
+      - test
+      - lint

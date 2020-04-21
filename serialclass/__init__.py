@@ -2,6 +2,7 @@
 
 Copyright (c) 2020 Greg Van Aken
 """
-__version__ = '0.0.1'
+BUILDNUM = 'dev'  # on CI builds - this is replaced with auto-incrementing build num
+__version__ = f'0.0.1.{BUILDNUM}'
 
 from serialclass.serialclass import SerialClass
