@@ -14,7 +14,7 @@ class SerialClass:
         """Make sure it is just an attribute and not a method, magic or otherwise"""
         return re.match('^(?!__).*', attr) and not callable(getattr(self, attr))
 
-    def serialize(self, *args, **kwargs):
+    def serialize(self, *args, **kwargs):  # pylint: disable = unused-argument
         """Get the serialized representation as a dict"""
         attribs = {}
         depth = kwargs.get('depth', float('inf'))
@@ -30,7 +30,8 @@ class SerialClass:
 
     def pstringify(self, *args, **kwargs):
         """Get a pretty jsonstring from the dict representation of the class"""
-        return json.dumps(self.serialize(*args, **kwargs), indent=4, sort_keys=True, default=SerialClass.string_repr)
+        return json.dumps(self.serialize(*args, **kwargs), indent=4,
+                          sort_keys=True, default=SerialClass.string_repr)
 
     def __iter__(self):
         """All the magic happens here"""
@@ -40,19 +41,19 @@ class SerialClass:
 
     # --Static Methods-- #
     @staticmethod
-    def unpack(el, depth=float('inf'), calls=0):
+    def unpack(elem, depth=float('inf'), calls=0):
         """Given an attribute value, make it a dict if possible"""
         if calls < depth:
             try:
-                return el.serialize(depth=depth, calls=calls + 1)
-            except (AttributeError):
-                if isinstance(el, list):
-                    return [SerialClass.unpack(item, depth=depth, calls=calls + 1) for item in el]
-                elif isinstance(el, dict):
-                    return {SerialClass.unpack(k, depth=depth, calls=calls + 1): el[k] for k in el}
-        return el
+                return elem.serialize(depth=depth, calls=calls + 1)
+            except AttributeError:
+                if isinstance(elem, list):
+                    return [SerialClass.unpack(item, depth=depth, calls=calls + 1) for item in elem]
+                if isinstance(elem, dict):
+                    return {SerialClass.unpack(k, depth=depth, calls=calls + 1): elem[k] for k in elem}
+        return elem
 
     @staticmethod
-    def string_repr(o):
+    def string_repr(obj):
         """Just get the class name + object"""
-        return str(o).split(' at ')[0] + '>'
+        return str(obj).split(' at ')[0] + '>'
