@@ -50,7 +50,8 @@ class SerialClass:
                 if isinstance(elem, list):
                     return [SerialClass.unpack(item, depth=depth, calls=calls + 1) for item in elem]
                 if isinstance(elem, dict):
-                    return {SerialClass.unpack(k, depth=depth, calls=calls + 1): elem[k] for k in elem}
+                    return {SerialClass.unpack(
+                        k, depth=depth, calls=calls + 1): elem[k] for k in elem}
         return elem
 
     @staticmethod
