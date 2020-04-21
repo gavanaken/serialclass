@@ -97,10 +97,10 @@ class Expected:
             "color": "dark brown",
             "material": "wood",
             "shelves": [
-                "<test_helpers.Library.Shelf object>",
-                "<test_helpers.Library.Shelf object>",
-                "<test_helpers.Library.Shelf object>",
-                "<test_helpers.Library.Shelf object>"
+                "<tests.test_helpers.Library.Shelf object>",
+                "<tests.test_helpers.Library.Shelf object>",
+                "<tests.test_helpers.Library.Shelf object>",
+                "<tests.test_helpers.Library.Shelf object>"
             ]
         }
     }

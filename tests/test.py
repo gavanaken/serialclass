@@ -5,7 +5,7 @@ Copyright (c) 2020 Greg Van Aken
 
 import unittest
 import json
-from test_helpers import Expected, Library
+from tests.test_helpers import Expected, Library
 
 
 class TestArbitraryClasses(unittest.TestCase):
