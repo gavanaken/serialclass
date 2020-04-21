@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: python tests/test.py
+          command: python test.py
           name: Test
   lint:
     executor: python/default
