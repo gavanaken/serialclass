@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: pip install --yes pylint
+          command: pip install pylint
           name: Install pylint
       - run:
           command: pylint serialclass
