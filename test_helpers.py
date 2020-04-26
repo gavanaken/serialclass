@@ -105,6 +105,10 @@ class Expected:
         }
     }
 
+    test_ignore_protected = {'Diary': {'_secret': 'My dirty little secret', 'joke': 'Knock, knock!'}}
+
+    test_ignore_protected_true = {'Diary': {'joke': 'Knock, knock!'}}
+
 
 class Library:
     """A class to hold some library-themed test classes"""
@@ -171,3 +175,11 @@ class Library:
             shelf_i = self.shelves[i]
             if len(books) < (shelf_i.capacity - len(shelf_i.books)):
                 shelf_i.books += books
+
+
+class Diary(SerialClass):
+    """A diary of secrets"""
+
+    def __init__(self):
+        self._secret = "My dirty little secret"
+        self.joke = "Knock, knock!"
