@@ -57,10 +57,10 @@ jobs:
           command: |
             expv=$(cat /tmp/workspace/expected.version)
             echo "expected version is $expv"
-            pip install serialclass
+            pip install --upgrade serialclass
             truev=$(pip freeze | grep serialclass)
             echo "actual version is $truev"
-            if ["$truev" == "serialclass==$expv"] ;
+            if [ "$truev" = "serialclass==$expv" ] ;
             then
               exit 0
             else
