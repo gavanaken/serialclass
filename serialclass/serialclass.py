@@ -23,7 +23,8 @@ class SerialClass:
         ignore_protected = kwargs.get('ignore_protected', False)
         for attr in dir(self):
             if self.class_attr(attr, ignore_protected):
-                attribs[attr] = self.unpack(getattr(self, attr), depth=depth, calls=calls)
+                attribs[attr] = self.unpack(getattr(self, attr), depth=depth,
+                                            calls=calls, ignore_protected=ignore_protected)
         return {type(self).__name__: attribs}
 
     def stringify(self, *args, **kwargs):
