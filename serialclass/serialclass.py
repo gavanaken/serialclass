@@ -35,12 +35,6 @@ class SerialClass:
         return json.dumps(self.serialize(*args, **kwargs), indent=4,
                           sort_keys=True, default=SerialClass.string_repr)
 
-    def __iter__(self):
-        """All the magic happens here"""
-        for attr in dir(self):
-            if self.class_attr(attr):
-                yield attr, self.unpack(getattr(self, attr))
-
     # --Static Methods-- #
     @staticmethod
     def unpack(elem, depth=float('inf'), calls=0):
