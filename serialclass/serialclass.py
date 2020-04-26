@@ -10,17 +10,19 @@ import json
 class SerialClass:
     """A base class that enables serialized representation of Python classes"""
 
-    def class_attr(self, attr):
+    def class_attr(self, attr, ignore_protected):
         """Make sure it is just an attribute and not a method, magic or otherwise"""
-        return re.match('^(?!__).*', attr) and not callable(getattr(self, attr))
+        protected = False if not ignore_protected else self.protected_attr(attr)
+        return re.match('^(?!__).*', attr) and not callable(getattr(self, attr)) and not protected
 
     def serialize(self, *args, **kwargs):  # pylint: disable = unused-argument
         """Get the serialized representation as a dict"""
         attribs = {}
         depth = kwargs.get('depth', float('inf'))
         calls = kwargs.get('calls', 0)
+        ignore_protected = kwargs.get('ignore_protected', False)
         for attr in dir(self):
-            if self.class_attr(attr):
+            if self.class_attr(attr, ignore_protected):
                 attribs[attr] = self.unpack(getattr(self, attr), depth=depth, calls=calls)
         return {type(self).__name__: attribs}
 
@@ -32,12 +34,6 @@ class SerialClass:
         """Get a pretty jsonstring from the dict representation of the class"""
         return json.dumps(self.serialize(*args, **kwargs), indent=4,
                           sort_keys=True, default=SerialClass.string_repr)
-
-    def __iter__(self):
-        """All the magic happens here"""
-        for attr in dir(self):
-            if self.class_attr(attr):
-                yield attr, self.unpack(getattr(self, attr))
 
     # --Static Methods-- #
     @staticmethod
@@ -58,3 +54,8 @@ class SerialClass:
     def string_repr(obj):
         """Just get the class name + object"""
         return str(obj).split(' at ')[0] + '>'
+
+    @staticmethod
+    def protected_attr(attr):
+        """Primitive, but check to see if it startswith _"""
+        return attr.startswith('_')

@@ -5,7 +5,7 @@ Copyright (c) 2020 Greg Van Aken
 
 import unittest
 import json
-from test_helpers import Expected, Library
+from test_helpers import Expected, Library, Diary
 
 
 class TestArbitraryClasses(unittest.TestCase):
@@ -43,6 +43,13 @@ class TestArbitraryClasses(unittest.TestCase):
         bookshelf = Library.Bookshelf(4)
         bookshelf.stock_shelf(2, [hc, hp])
         self.assertEqual(json.dumps(Expected.test_bookshelf_depth_1), bookshelf.stringify(depth=1))
+
+    def test_ignore_protected(self):
+        """Testing that we can choose to ignore or not ignore protected attributes"""
+        diary = Diary()
+        self.assertEqual(Expected.test_ignore_protected, diary.serialize())
+        self.assertEqual(Expected.test_ignore_protected_true, diary.serialize(ignore_protected=True))
+        self.assertEqual(json.dumps(Expected.test_ignore_protected_true), diary.stringify(ignore_protected=True))
 
 
 if __name__ == '__main__':
