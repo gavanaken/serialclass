@@ -55,7 +55,8 @@ jobs:
           at: /tmp/workspace
       - run:
           command: |
-            $expv = $(cat /tmp/workspace/expected.version)
+            expv=$(cat /tmp/workspace/expected.version)
+            echo $expv
             pip install serialclass
             if [$(pip freeze | grep serialclass) == "serialclass==$($expv)"] ;
             then
