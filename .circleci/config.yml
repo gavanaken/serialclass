@@ -54,6 +54,9 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run:
+          # Temporary - to wait for PyPi to update
+          command: sleep 10
+      - run:
           command: |
             expv=$(cat /tmp/workspace/expected.version)
             echo "expected version is $expv"
