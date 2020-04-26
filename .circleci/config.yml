@@ -43,6 +43,10 @@ jobs:
             mkdir -p /tmp/workspace
             echo $(python -c "from serialclass import __version__; print(__version__)") > /tmp/workspace/expected.version
             cat /tmp/workspace/expected.version
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - expected.version
 
   verify-deployment:
     executor: python/default
