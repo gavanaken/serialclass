@@ -38,7 +38,26 @@ jobs:
             sed -i "s/pypi-token/${PYPI_SECRET}/g" .pypirc
             cp .pypirc $HOME/.pypirc
             twine upload --repository pypi dist/*
+      - run:
+          command: |
+            mkdir -p /tmp/workspace
+            echo $(python -c "from serialclass import __version__; print(__version__)") > /tmp/workspace/expected.version
 
+  verify-deployment:
+    executor: python/default
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          command: |
+            $expv = $(cat /tmp/workspace/expected.version)
+            pip install serialclass
+            if [$(pip freeze | grep serialclass) = "serialclass==$($expv)"] ;
+            then
+              exit 0
+            else
+              exit 1
+            fi
 
 workflows:
   version: 2
@@ -51,3 +70,6 @@ workflows:
           requires:
             - test
             - lint
+      - verify-deployment:
+          requires:
+            - build-and-deploy

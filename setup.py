@@ -9,7 +9,7 @@ setuptools.setup(
     version=serialclass.__version__,
     author='Greg Van Aken',
     author_email='gavanaken@gmail.com',
-    description='A base class to get well-formatted serialized representations of children classes',
+    description='A base class to get well-formatted serialized representations of child classes',
     long_description=full_description,
     long_description_content_type='text/markdown',
     url='https://github.com/gavanaken/serialclass',
