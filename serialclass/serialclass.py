@@ -45,10 +45,12 @@ class SerialClass:
                                       ignore_protected=ignore_protected)
             except AttributeError:
                 if isinstance(elem, list):
-                    return [SerialClass.unpack(item, depth=depth, calls=calls + 1) for item in elem]
+                    return [SerialClass.unpack(item, depth=depth, calls=calls + 1,
+                                               ignore_protected=ignore_protected) for item in elem]
                 if isinstance(elem, dict):
                     return {SerialClass.unpack(
-                        k, depth=depth, calls=calls + 1): elem[k] for k in elem}
+                        k, depth=depth, calls=calls + 1,
+                        ignore_protected=ignore_protected): elem[k] for k in elem}
         return elem
 
     @staticmethod
