@@ -41,7 +41,8 @@ class SerialClass:
         """Given an attribute value, make it a dict if possible"""
         if calls < depth:
             try:
-                return elem.serialize(depth=depth, calls=calls + 1, ignore_protected=ignore_protected)
+                return elem.serialize(depth=depth, calls=calls + 1,
+                                      ignore_protected=ignore_protected)
             except AttributeError:
                 if isinstance(elem, list):
                     return [SerialClass.unpack(item, depth=depth, calls=calls + 1) for item in elem]
