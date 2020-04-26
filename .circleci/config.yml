@@ -66,12 +66,14 @@ jobs:
               echo "actual version is $truev"
               if [ "$truev" = "serialclass==$expv" ] ;
               then
+                echo "PyPI package update confirmed"
                 exit 0
               else
                 echo "Sleeping for 5 seconds"
                 sleep 5
               fi
             done
+            echo "Error: Package not updated in PyPI after 1 minute"
             exit 1
 
 workflows:
