@@ -22,9 +22,75 @@ jobs:
           command: pylint serialclass
           name: Run pylint
 
+  build-and-deploy:
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          command: sed -i "s/dev/${CIRCLE_BUILD_NUM}/g" serialclass/__init__.py
+          name: Update build number
+      - run:
+          command: python setup.py sdist bdist_wheel
+          name: Create distribution archives
+      - run:
+          command: |
+            pip install twine
+            sed -i "s/pypi-token/${PYPI_SECRET}/g" .pypirc
+            cp .pypirc $HOME/.pypirc
+            twine upload --repository pypi dist/*
+      - run:
+          command: |
+            mkdir -p /tmp/workspace
+            echo $(python -c "from serialclass import __version__; print(__version__)") > /tmp/workspace/expected.version
+            cat /tmp/workspace/expected.version
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - expected.version
+
+  verify-deployment:
+    executor: python/default
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          command: |
+            expv=$(cat /tmp/workspace/expected.version)
+            echo "expected version is $expv"
+            runtime="1 minute"
+            endtime=$(date -ud "$runtime" +%s)
+            while [[ $(date -u +%s) -le $endtime ]]
+            do
+              pip install --upgrade serialclass
+              truev=$(pip freeze | grep serialclass)
+              echo "actual version is $truev"
+              if [ "$truev" = "serialclass==$expv" ] ;
+              then
+                echo "PyPI package update confirmed"
+                exit 0
+              else
+                echo "Sleeping for 5 seconds"
+                sleep 5
+              fi
+            done
+            echo "Error: Package not updated in PyPI after 1 minute"
+            exit 1
+
 workflows:
   version: 2
   main:
     jobs:
       - test
       - lint
+      - build-and-deploy:
+          context: PYPI_UPLOAD
+          requires:
+            - test
+            - lint
+          filters:
+            branches:
+              only:
+                - master
+      - verify-deployment:
+          requires:
+            - build-and-deploy
