@@ -87,6 +87,10 @@ workflows:
           requires:
             - test
             - lint
+          filters:
+            branches:
+              only:
+                - master
       - verify-deployment:
           requires:
             - build-and-deploy
