@@ -42,6 +42,7 @@ jobs:
           command: |
             mkdir -p /tmp/workspace
             echo $(python -c "from serialclass import __version__; print(__version__)") > /tmp/workspace/expected.version
+            cat /tmp/workspace/expected.version
 
   verify-deployment:
     executor: python/default
@@ -52,7 +53,7 @@ jobs:
           command: |
             $expv = $(cat /tmp/workspace/expected.version)
             pip install serialclass
-            if [$(pip freeze | grep serialclass) = "serialclass==$($expv)"] ;
+            if [$(pip freeze | grep serialclass) == "serialclass==$($expv)"] ;
             then
               exit 0
             else
