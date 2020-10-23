@@ -51,7 +51,9 @@ class SerialClass:
                 if isinstance(elem, dict):
                     return {SerialClass.unpack(
                         k, depth=depth, calls=calls + 1,
-                        ignore_protected=ignore_protected): elem[k] for k in elem}
+                        ignore_protected=ignore_protected):
+                                SerialClass.unpack(elem[k],
+                                                   depth=depth, calls=calls + 1) for k in elem}
         return elem
 
     @staticmethod
